@@ -1,6 +1,8 @@
 package org.example;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+import org.example.dao.AnimalDao;
+import org.example.dao.AnimalDaoImpl;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -30,24 +32,12 @@ public class Main {
             Connection connection = dataSource.getConnection();
             LOGGER.log(Level.INFO, "Connection successful");
 
+            AnimalDao animalDao = new AnimalDaoImpl(connection);
+
             // statement <- folosim pentru a trimite comenzi sql la serverul de Baze de Date
             Statement statement = connection.createStatement();
 
-            statement.execute("create table if not exists animals (" +
-                    "id integer not null auto_increment, " +
-                    "name varchar(100), " +
-                    "species varchar(100), " +
-                    "primary key (id))");
-            LOGGER.info("Create table animals was successful");
-
-            // putem sa refolosim obiectul statement pentru a trimite alte instructiuni sql către baza de date
-            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
-            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
-            LOGGER.info("Data insertion was successful");
-
-            statement.execute("update animals set name = \"Bubu\" where id = 2");
-
-
+            animalDao.createTable();
             statement.execute("create table food (" +
                     "id integer auto_increment, " +
                     "name varchar(100), " +
@@ -55,6 +45,14 @@ public class Main {
                     "calories_per_100 integer, " +
                     "expiration_date date, " +
                     "primary key (id) )");
+            LOGGER.info("Tables created successfully");
+
+            // putem sa refolosim obiectul statement pentru a trimite alte instructiuni sql către baza de date
+            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
+            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
+            LOGGER.info("Data insertion was successful");
+
+            statement.execute("update animals set name = \"Bubu\" where id = 2");
 
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into food (name, description, calories_per_100, expiration_date) values (?, ?, ?, ?)");
@@ -96,8 +94,10 @@ public class Main {
                 + rs.getInt(4) + "kcal per 100g - "
                 + "expiră la data " + rs.getDate(5));
             }
-            statement.execute("drop table animals");
+
+            animalDao.dropTable();
             statement.execute("drop table food");
+            LOGGER.info("Tables dropped successfully");
 
         } catch (SQLException sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.getMessage());
