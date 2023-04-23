@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13f70213-6c71-49d4-8ee2-1798530f39eb" name="Changes" comment="add database configuration and connect to db">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dao/FoodDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dao/FoodDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/dao/AnimalDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/dao/AnimalDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/dao/AnimalDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/dao/AnimalDaoImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
