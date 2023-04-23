@@ -15,7 +15,7 @@ public class FoodDaoImpl implements FoodDao{
     @Override
     public void createTable() throws SQLException {
         Statement statement = connection.createStatement();
-        statement.execute("create table food (" +
+        statement.execute("create table if not exists food (" +
                 "id integer auto_increment, " +
                 "name varchar(100), " +
                 "description varchar(100)," +

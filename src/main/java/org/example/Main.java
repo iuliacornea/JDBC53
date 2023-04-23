@@ -1,14 +1,13 @@
 package org.example;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import org.example.dao.AnimalDao;
-import org.example.dao.AnimalDaoImpl;
-import org.example.dao.FoodDao;
-import org.example.dao.FoodDaoImpl;
+import org.example.dao.*;
 import org.example.model.Animal;
+import org.example.model.Car;
 import org.example.model.Food;
 
 import java.sql.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,12 +37,14 @@ public class Main {
 
             AnimalDao animalDao = new AnimalDaoImpl(connection);
             FoodDao foodDao = new FoodDaoImpl(connection);
+            CarDao carDao = new CarDaoImpl(connection);
 
             // statement <- folosim pentru a trimite comenzi sql la serverul de Baze de Date
             Statement statement = connection.createStatement();
 
             animalDao.createTable();
             foodDao.createTable();
+            carDao.createTable();
             LOGGER.info("Tables created successfully");
 
 
@@ -53,8 +54,29 @@ public class Main {
             Date expirationDate = Date.valueOf("2024-10-12");
             foodDao.create(new Food(null, "ciocolata", "ciocolată de casă", 550, expirationDate));
             foodDao.create(new Food(null, "alune", "pungă de 500g de alune prajite", 650, expirationDate));
+
+            carDao.createCar(new Car(null, "Dacie", Date.valueOf("2010-08-27")));
+            carDao.createCar(new Car(null, "Renaul", Date.valueOf("2020-10-11")));
+            carDao.createCar(new Car(null, "Dacie", Date.valueOf("2010-08-27")));
+            carDao.createCar(new Car(null, "Dacie", Date.valueOf("2010-08-27")));
             LOGGER.info("Data insertion was successful");
 
+
+            System.out.println("Cars:");
+            List<Car> cars = carDao.readAllCars();
+            for(Car c : cars) {
+                System.out.println(c);
+            }
+
+            carDao.updateCar(new Car(2, "Toyota", Date.valueOf("2023-10-03")));
+            carDao.deleteCar(1);
+
+
+            System.out.println("Cars:");
+            cars = carDao.readAllCars();
+            for(Car c : cars) {
+                System.out.println(c);
+            }
 
             ResultSet rs = statement.executeQuery("SELECT * FROM animals");
             System.out.println("Animals:");
@@ -68,10 +90,6 @@ public class Main {
             rs = statement.executeQuery("SELECT * FROM food order by calories_per_100 desc");
             System.out.println("Foods:");
             while(rs.next() == true) {
-//            Food:
-//              1. ciocolata - ciocolata de casa - 550kcal per 100g - expiră la 2024-10-12
-//              2. alune - pungă de 500g de alune prajite - 600kcal per 100g - expiră la 2024-10-12
-
                 System.out.println(rs.getInt(1) + ". "
                         + rs.getString(2) + " - "
                 + rs.getString(3) + " - "
@@ -79,6 +97,8 @@ public class Main {
                 + "expiră la data " + rs.getDate(5));
             }
 
+
+            carDao.dropTable();
             animalDao.dropTable();
             foodDao.dropTable();
             LOGGER.info("Tables dropped successfully");
@@ -88,4 +108,5 @@ public class Main {
             sqlException.printStackTrace();
         }
     }
+
 }
