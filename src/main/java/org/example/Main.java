@@ -33,7 +33,11 @@ public class Main {
             // statement <- folosim pentru a trimite comenzi sql la serverul de Baze de Date
             Statement statement = connection.createStatement();
 
-            statement.execute("create table if not exists animals (id integer not null auto_increment, name varchar(100), species varchar(100), primary key (id))");
+            statement.execute("create table if not exists animals (" +
+                    "id integer not null auto_increment, " +
+                    "name varchar(100), " +
+                    "species varchar(100), " +
+                    "primary key (id))");
             LOGGER.info("Create table animals was successful");
 
             // putem sa refolosim obiectul statement pentru a trimite alte instructiuni sql către baza de date
@@ -62,7 +66,6 @@ public class Main {
             // întotdeauna trebuie rulat .execute() dacă vrem să fie executat codul sql pe baza de date
             // comanda care trimite instrucțiunile sql către server (instrucțiunile pregătite mai sus)
             preparedStatement.execute();
-
 
             preparedStatement.setString(1, "alune");
             preparedStatement.setString(2, "pungă de 500g de alune prajite");
