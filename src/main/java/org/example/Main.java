@@ -5,6 +5,8 @@ import org.example.dao.AnimalDao;
 import org.example.dao.AnimalDaoImpl;
 import org.example.dao.FoodDao;
 import org.example.dao.FoodDaoImpl;
+import org.example.model.Animal;
+import org.example.model.Food;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -44,29 +46,14 @@ public class Main {
             foodDao.createTable();
             LOGGER.info("Tables created successfully");
 
-            // putem sa refolosim obiectul statement pentru a trimite alte instructiuni sql către baza de date
-            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
-            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
-            LOGGER.info("Data insertion was successful");
 
-            statement.execute("update animals set name = \"Bubu\" where id = 2");
+            animalDao.create(new Animal(null, "Lucky", "Dog"));
+            animalDao.create(new Animal(null, "Lucky", "Dog"));
 
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "insert into food (name, description, calories_per_100, expiration_date) values (?, ?, ?, ?)");
-            preparedStatement.setString(1, "ciocolată");
-            preparedStatement.setString(2, "ciocolată de casă");
-            preparedStatement.setInt(3, 550);
             Date expirationDate = Date.valueOf("2024-10-12");
-            preparedStatement.setDate(4, expirationDate);
-            // întotdeauna trebuie rulat .execute() dacă vrem să fie executat codul sql pe baza de date
-            // comanda care trimite instrucțiunile sql către server (instrucțiunile pregătite mai sus)
-            preparedStatement.execute();
-
-            preparedStatement.setString(1, "alune");
-            preparedStatement.setString(2, "pungă de 500g de alune prajite");
-            preparedStatement.setInt(3, 600);
-            preparedStatement.setDate(4, expirationDate);
-            preparedStatement.execute();
+            foodDao.create(new Food(null, "ciocolata", "ciocolată de casă", 550, expirationDate));
+            foodDao.create(new Food(null, "alune", "pungă de 500g de alune prajite", 650, expirationDate));
+            LOGGER.info("Data insertion was successful");
 
 
             ResultSet rs = statement.executeQuery("SELECT * FROM animals");
