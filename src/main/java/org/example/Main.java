@@ -3,6 +3,8 @@ package org.example;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.example.dao.AnimalDao;
 import org.example.dao.AnimalDaoImpl;
+import org.example.dao.FoodDao;
+import org.example.dao.FoodDaoImpl;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -33,18 +35,13 @@ public class Main {
             LOGGER.log(Level.INFO, "Connection successful");
 
             AnimalDao animalDao = new AnimalDaoImpl(connection);
+            FoodDao foodDao = new FoodDaoImpl(connection);
 
             // statement <- folosim pentru a trimite comenzi sql la serverul de Baze de Date
             Statement statement = connection.createStatement();
 
             animalDao.createTable();
-            statement.execute("create table food (" +
-                    "id integer auto_increment, " +
-                    "name varchar(100), " +
-                    "description varchar(100)," +
-                    "calories_per_100 integer, " +
-                    "expiration_date date, " +
-                    "primary key (id) )");
+            foodDao.createTable();
             LOGGER.info("Tables created successfully");
 
             // putem sa refolosim obiectul statement pentru a trimite alte instructiuni sql către baza de date
@@ -96,7 +93,7 @@ public class Main {
             }
 
             animalDao.dropTable();
-            statement.execute("drop table food");
+            foodDao.dropTable();
             LOGGER.info("Tables dropped successfully");
 
         } catch (SQLException sqlException) {
