@@ -1,8 +1,8 @@
 package org.example.dao;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import org.example.model.Food;
+
+import java.sql.*;
 
 public class FoodDaoImpl implements FoodDao{
 
@@ -22,6 +22,19 @@ public class FoodDaoImpl implements FoodDao{
                 "calories_per_100 integer, " +
                 "expiration_date date, " +
                 "primary key (id) )");
+    }
+
+    @Override
+    public void create(Food food) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "insert into food (name, description, calories_per_100, expiration_date) values (?, ?, ?, ?)");
+        preparedStatement.setString(1, food.getName());
+        preparedStatement.setString(2, food.getDescription());
+        preparedStatement.setInt(3, food.getCaloriesPer100());
+        preparedStatement.setDate(4, food.getExpirationDate());
+        // întotdeauna trebuie rulat .execute() dacă vrem să fie executat codul sql pe baza de date
+        // comanda care trimite instrucțiunile sql către server (instrucțiunile pregătite mai sus)
+        preparedStatement.execute();
     }
 
     @Override

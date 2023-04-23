@@ -32,6 +32,8 @@ public class AnimalDaoImpl implements AnimalDao{
         );
         preparedStatement.setString(1, animal.getName());
         preparedStatement.setString(2, animal.getSpecies());
+        // întotdeauna trebuie rulat .execute() dacă vrem să fie executat codul sql pe baza de date
+        // comanda care trimite instrucțiunile sql către server (instrucțiunile pregătite mai sus)
         preparedStatement.execute();
     }
 
